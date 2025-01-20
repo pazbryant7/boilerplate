@@ -1,0 +1,87 @@
+#!/usr/bin/env sh
+
+COPY_MESSAGE=""
+CREATED_MESSAGE=""
+BOILER_PLATE_DIR="$HOME/Documents/github/boilerplate/templates"
+
+# NOTE: improve this with multiselection `-m`
+select_template() {
+	fd --base-directory="$BOILER_PLATE_DIR" \
+		--hidden \
+		--type=file \
+		--exclude="*.md" |
+		fzf --multi --preview "bat --color=always --style=numbers $BOILER_PLATE_DIR/{}" \
+			--preview-window=right:60% \
+			--header="Select a template (ESC to exit)"
+
+}
+
+copy_to_clipboard() {
+	filename=$(basename "$1")
+
+	printf "Template options for: %s \n" "$filename"
+	printf "Copy file to clipboard? (y/n) " && read -r response
+
+	[ "$response" = "n" ] && return 0
+
+	if bat "$1" | xclip -selection clipboard; then
+		COPY_MESSAGE="✓ $filename has been copied \n"
+		return 0
+	fi
+
+	echo "✗ Failed to copy to clipboard"
+	return 1
+}
+
+create_file_in_dir() {
+	filename=$(basename "$1")
+	dest="$(pwd)/$filename"
+
+	printf "Template options for: %s \n" "$filename"
+	printf "Create file in current directory? (y/n) " && read -r response
+
+	[ "$response" = "n" ] && return 0
+
+	if [ -f "$dest" ]; then
+		printf "File already exist, overwrite it? (y/n) " &&
+			read -r overwrite
+
+		[ "$overwrite" != "y" ] && return 0
+	fi
+
+	if cp --force "$1" "$dest"; then
+		CREATED_MESSAGE="✓ $filename has been created \n"
+		return 0
+	fi
+
+	echo "✗ Failed to create file"
+	return 1
+}
+
+main() {
+	selected_templates=$(select_template)
+	[ -z "$selected_templates" ] && exit 1
+
+	for template in $selected_templates; do
+		full_template_path="$BOILER_PLATE_DIR/$template"
+
+		if [ ! -f "$full_template_path" ]; then
+			echo "Error: Template file not found: $full_template_path"
+			exit 1
+		fi
+
+		copy_to_clipboard "$full_template_path"
+		create_file_in_dir "$full_template_path"
+
+		[ -n "$COPY_MESSAGE" ] &&
+			printf "%s" "$COPY_MESSAGE"
+		[ -n "$CREATED_MESSAGE" ] &&
+			printf "%s" "$CREATED_MESSAGE"
+
+    echo ""
+		echo "" # add blank space between actions
+
+	done
+}
+
+main
