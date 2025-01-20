@@ -11,8 +11,8 @@ workflows.
 ## Purpose of This Repository
 
 In addition to storing configuration files, this repository is paired with a
-script designed to automate the process of copying these files into new
-projects. The script leverages `fzf` and `fd` as core CLI tools, allowing for
-quick and efficient selection of files. By adding the script to your `PATH`, it
-can be accessed globally from the terminal, ensuring seamless integration into
-your workflow.
+script `./bump-boilerplate` designed to automate the process of copying these
+files into new projects. The script leverages `fzf` and `fd` as core CLI tools,
+allowing for quick and efficient selection of files. By adding the script to
+your `PATH`, it can be accessed globally from the terminal, ensuring seamless
+integration into your workflow.
