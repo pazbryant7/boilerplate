@@ -2,11 +2,12 @@ root = true
 
 [*]
 indent_size = 2
+indent_style = tab
 charset = utf-8
 end_of_line = lf
-indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{js,ts,json,lua}]
-max_line_length = 80
+[*.{yaml,yml,json,js,ts,lua,toml,.editorconfig}]
+indent_size = 2
+indent_style = space
