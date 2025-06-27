@@ -1,0 +1,51 @@
+" --- General Vim Settings ---
+
+" Have j and k navigate visual lines rather than logical ones
+" This is crucial in Obsidian where lines often wrap
+nmap j gj
+nmap k gk
+
+" Yank to system clipboard
+" This makes 'y' copy to your system clipboard, not just Vim's internal register.
+set clipboard=unnamed " or unnamedplus
+
+" --- Obsidian Specific Mappings (using obcommand) ---
+
+" The `obcommand` allows you to execute Obsidian's internal commands.
+" To find available Obsidian commands:
+" 1. Open Obsidian's Developer Tools (Ctrl+Shift+I or Cmd+Opt+I).
+" 2. Go to the Console tab.
+" 3. Type `:obcommand` in the Obsidian editor (in Vim mode) and check the console output.
+
+" Navigate back and forward in history
+" Make sure to unbind these in Obsidian's hotkey settings if they conflict.
+exmap back obcommand app:go-back
+nmap <C-o> :back<CR>
+exmap forward obcommand app:go-forward
+nmap <C-i> :forward<CR>
+
+" Reveal active file in file explorer
+exmap revealFile obcommand file-explorer:reveal-active-file
+nmap <leader>gf :revealFile<CR>
+
+" --- Custom Mappings ---
+
+" Define your leader key (e.g., Space)
+" Note: mapleader often doesn't work directly, so you might need to unmap <Space>
+" and then use <Space> directly in your mappings.
+" unmap <Space> " Uncomment if you want to use Space as leader
+
+nmap H ^
+nmap L $
+
+" Quickly remove search highlights
+nmap <Esc> :nohl<CR>
+
+" Surround selected text (requires the 'surround' command provided by the plugin)
+" For example, select text in visual mode and then type `cs"` to surround with quotes.
+" Or `yss"` to surround the current line with quotes.
+" Not strictly Vim-surround, but a plugin feature.
+" vmap S <Plug>(obsidian-vimrc-surround)
+
+" --- Comments ---
+" Lines starting with " are comments in vimrc files.
