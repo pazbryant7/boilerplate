@@ -1,3 +1,7 @@
+"file name should be placed in the root directory under the name of
+"..obsidian.vimrc
+
+
 " --- General Vim Settings ---
 
 " Have j and k navigate visual lines rather than logical ones
