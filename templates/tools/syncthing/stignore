@@ -9,26 +9,7 @@
 # The .obsidian folder contains settings, plugins, workspaces.
 # Often, you want different settings/plugin states on different devices (PC vs. Phone).
 # If you want separate settings for PC and mobile:
-#.obsidian/
-
-# OR, if you want to sync ALL of .obsidian (plugins, themes, core configs):
-# !.obsidian/plugins/
-# !.obsidian/themes/
-# !.obsidian/snippets/
-# !.obsidian/daily-notes.json # Example: if you want to sync core plugin configs
-# !.obsidian/app.json # Core app settings might be good to sync
-# If you choose to sync .obsidian, be aware of frequent conflicts, especially with workspace files.
-
-# Recommended minimal .obsidian ignore for cross-device sanity:
-.obsidian/workspace* # Ignore workspace files (e.g., workspace.json, workspace-mobile.json)
-.obsidian/current-workspace.json
-.obsidian/graph.json # The graph view state
-.obsidian/backups/ # Obsidian's internal backups
-.obsidian/appearance.json # Theme settings, if you want different themes on different devices
-.obsidian/community-plugins.json
-.obsidian/plugins/*.json # Plugin specific data. If you want plugin settings to sync, remove this.
-.obsidian/plugins/*.js # Source maps for plugins
-.obsidian/plugins/*.css # Source maps for plugins
+.obsidian/
 
 # Common temporary/system files to ignore (good practice)
 ~*.md # Temporary Obsidian lock files (tilde prefix)
