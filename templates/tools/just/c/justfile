@@ -1,0 +1,19 @@
+# Default recipe to run when you just type "just"
+
+# It first builds the code, then runs it.
+default: run
+
+# Build the C source code
+# Usage: just build
+# This compiles 'hello.c' into an executable named 'hello'
+
+# The -g flag is included to add debugging information.
+build:
+    gcc -g ./hello-world.c -o a.out
+
+# Run the compiled program
+# Usage: just run
+
+# This recipe depends on 'build', so it will compile first if needed.
+run: build
+    ./a.out
