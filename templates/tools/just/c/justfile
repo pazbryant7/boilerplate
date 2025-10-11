@@ -6,10 +6,14 @@ default: run
 # Build the C source code
 # Usage: just build
 # This compiles 'hello.c' into an executable named 'hello'
-
 # The -g flag is included to add debugging information.
+# The -Wall flag is use to detect posible errors
+# The -pedantic flag require to use C standar features
+# The -ansi flag turns off GCC non standar features and enables some other ones
+
+# The -std=c99 flag sepecifies which version of the C compiler should be use
 build:
-    gcc -g ./hello-world.c -o a.out
+    gcc -O -g -Wall -W -pedantic -ansi -std=c99 ./hello-world.c -o a.out
 
 # Run the compiled program
 # Usage: just run
