@@ -1,0 +1,380 @@
+### Variables
+
+# Global variables used across requests
+
+@api_url = https://api.example.com/v1
+@base_url = https://httpbin.org
+@local_variable = "value"
+@timeout = 5000
+
+
+###
+
+# ──────────────────────────────────────────────
+# AUTH
+# ──────────────────────────────────────────────
+
+# @name login_req
+
+POST https://httpbin.org/post HTTP/1.1
+Content-Type: application/json
+
+{
+  "password": "secret",
+  "username": "admin"
+}
+
+
+###
+
+# @name refresh_token
+
+POST {{api_url}}/auth/refresh HTTP/1.1
+Content-Type: application/json
+
+{
+  "refresh_token": "{{login_req.json.refresh_token}}"
+}
+
+
+###
+
+# ──────────────────────────────────────────────
+# GET REQUESTS
+# ──────────────────────────────────────────────
+
+# @name get_basic
+
+GET {{base_url}}/get HTTP/1.1
+
+
+###
+
+# @name get_with_auth
+
+GET {{base_url}}/bearer HTTP/1.1
+Authorization: Bearer {{login_req.json.token}}
+
+
+###
+
+# @name get_with_query_params
+
+GET {{base_url}}/get?page=1&limit=10&sort=desc HTTP/1.1
+Accept: application/json
+
+
+###
+
+# @name get_with_headers
+
+GET {{base_url}}/headers HTTP/1.1
+Accept: application/json
+X-Custom-Header: my-value
+X-Request-Id: 12345
+
+
+###
+
+# @name get_user
+
+GET {{api_url}}/users/1 HTTP/1.1
+Authorization: Bearer {{login_req.json.token}}
+Accept: application/json
+
+
+###
+
+# ──────────────────────────────────────────────
+# POST REQUESTS
+# ──────────────────────────────────────────────
+
+# @name post_json
+
+POST {{base_url}}/post HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{login_req.json.token}}
+
+{
+  "address": {
+    "city": "Springfield",
+    "street": "123 Main St"
+  },
+  "age": 30,
+  "email": "john@example.com",
+  "name": "John Doe",
+  "tags": [
+    "admin",
+    "user"
+  ]
+}
+
+
+###
+
+# @name post_form_urlencoded
+
+POST {{base_url}}/post HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+username=johndoe&
+password=secret&
+remember_me=true
+
+
+###
+
+# @name post_multipart_form
+
+POST {{base_url}}/post HTTP/1.1
+Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="field1"
+
+value1
+------Boundary
+Content-Disposition: form-data; name="file"; filename="example.txt"
+Content-Type: text/plain
+
+File content goes here
+------Boundary--
+
+
+###
+
+# @name post_xml
+
+POST {{base_url}}/post HTTP/1.1
+Content-Type: application/xml
+Accept: application/xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+  <name>John Doe</name>
+  <email>john@example.com</email>
+</user>
+
+
+###
+
+# ──────────────────────────────────────────────
+# PUT / PATCH / DELETE
+# ──────────────────────────────────────────────
+
+# @name put_update
+
+PUT {{api_url}}/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{login_req.json.token}}
+
+{
+  "email": "jane@example.com",
+  "name": "Jane Doe"
+}
+
+
+###
+
+# @name patch_partial_update
+
+PATCH {{api_url}}/users/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{login_req.json.token}}
+
+{
+  "email": "newemail@example.com"
+}
+
+
+###
+
+# @name delete_resource
+
+DELETE {{api_url}}/users/1 HTTP/1.1
+Authorization: Bearer {{login_req.json.token}}
+
+
+###
+
+# ──────────────────────────────────────────────
+# GRAPHQL
+# ──────────────────────────────────────────────
+
+# @name graphql_query
+
+POST {{api_url}}/graphql HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{login_req.json.token}}
+
+{
+  "query": "query GetUser($id: ID!) { user(id: $id) { id name email createdAt } }",
+  "variables": {
+    "id": "1"
+  }
+}
+
+
+###
+
+# @name graphql_mutation
+
+POST {{api_url}}/graphql HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{login_req.json.token}}
+
+{
+  "query": "mutation CreateUser($input: CreateUserInput!) { createUser(input: $input) { id name email } }",
+  "variables": {
+    "input": {
+      "email": "john@example.com",
+      "name": "John Doe"
+    }
+  }
+}
+
+
+###
+
+# ──────────────────────────────────────────────
+# FILE UPLOAD
+# ──────────────────────────────────────────────
+
+# @name upload_file
+
+POST {{base_url}}/post HTTP/1.1
+Content-Type: multipart/form-data; boundary=----Boundary
+Authorization: Bearer {{login_req.json.token}}
+
+------Boundary
+Content-Disposition: form-data; name="file"; filename="photo.jpg"
+Content-Type: image/jpeg
+
+< /path/to/your/file.jpg
+------Boundary--
+
+
+###
+
+# ──────────────────────────────────────────────
+# BASIC AUTH / API KEY
+# ──────────────────────────────────────────────
+
+# @name basic_auth
+
+GET {{base_url}}/basic-auth/user/passwd HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd2Q=
+
+
+###
+
+# @name api_key_header
+
+GET {{api_url}}/resource HTTP/1.1
+X-Api-Key: your_api_key_here
+Accept: application/json
+
+
+###
+
+# @name api_key_query_param
+
+GET {{api_url}}/resource?api_key=your_api_key_here HTTP/1.1
+Accept: application/json
+
+
+###
+
+# ──────────────────────────────────────────────
+# CHAINING / RESPONSE EXTRACTION
+# ──────────────────────────────────────────────
+
+# @name create_post
+
+POST {{api_url}}/posts HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{login_req.json.token}}
+
+{
+  "body": "This is my first post.",
+  "title": "Hello World"
+}
+
+
+###
+
+# @name get_created_post
+
+# Uses the id from the create_post response
+
+GET {{api_url}}/posts/{{create_post.json.id}} HTTP/1.1
+Authorization: Bearer {{login_req.json.token}}
+
+
+###
+
+# ──────────────────────────────────────────────
+# COOKIES
+# ──────────────────────────────────────────────
+
+# @name set_cookies
+
+GET {{base_url}}/cookies/set?session_id=abc123&theme=dark HTTP/1.1
+
+
+###
+
+# @name send_cookies
+
+GET {{base_url}}/cookies HTTP/1.1
+Cookie: session_id=abc123; theme=dark
+
+
+###
+
+# ──────────────────────────────────────────────
+# REDIRECTS & STATUS CODES
+# ──────────────────────────────────────────────
+
+# @name follow_redirect
+
+GET {{base_url}}/redirect/3 HTTP/1.1
+
+
+###
+
+# @name expect_404
+
+GET {{api_url}}/nonexistent-resource HTTP/1.1
+Authorization: Bearer {{login_req.json.token}}
+
+
+###
+
+# ──────────────────────────────────────────────
+# HEALTH CHECK / MISC
+# ──────────────────────────────────────────────
+
+# @name health_check
+
+GET {{api_url}}/health HTTP/1.1
+Accept: application/json
+
+
+###
+
+# @name head_request
+
+HEAD {{base_url}}/get HTTP/1.1
+
+
+###
+
+# @name options_request
+
+OPTIONS {{base_url}}/get HTTP/1.1
+Origin: http://localhost:3000
+Access-Control-Request-Method: POST
+
+
+###
